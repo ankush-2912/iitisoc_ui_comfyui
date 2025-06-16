@@ -39,8 +39,9 @@ export const useImageGeneration = () => {
       formData.append('num_inference_steps', numInferenceSteps.toString());
       formData.append('guidance_scale', guidanceScale.toString());
       
-      // Add control image if selected
+      // Only add control image if one is selected
       if (controlImage) {
+        console.log("Adding control image:", controlImage.name, controlImage.size);
         formData.append('control_image', controlImage);
       }
       
@@ -49,18 +50,32 @@ export const useImageGeneration = () => {
         formData.append('lora_scales', JSON.stringify(loraScales));
       }
 
+      // Log FormData contents for debugging
+      console.log("FormData contents:");
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      // Don't set Content-Type header - let the browser set it automatically for multipart/form-data
+      const headers = {
+        ...backendConfig.headers
+        // Note: DO NOT set 'Content-Type': 'multipart/form-data' here
+        // The browser will set it automatically with the correct boundary
+      };
+
       const response = await fetch(getApiUrl('/generate-image/'), {
         method: 'POST',
-        headers: backendConfig.headers,
+        headers: headers,
         body: formData
       });
 
       console.log("Response status:", response.status);
+      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Backend error:", errorText);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
       // Convert response to blob
@@ -83,7 +98,7 @@ export const useImageGeneration = () => {
 
     } catch (error) {
       console.error('Error generating image:', error);
-      addError("Failed to generate image. Make sure your backend is running.");
+      addError(`Failed to generate image: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsGenerating(false);
     }
