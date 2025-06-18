@@ -1,8 +1,10 @@
 
-import { TabsContent } from "@/components/ui/tabs";
+import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PlaygroundContent from "@/components/PlaygroundContent";
 import DocumentationPanel from "@/components/DocumentationPanel";
 import SystemDashboard from "@/components/SystemDashboard";
+import InOutpaintingTab from "@/components/InOutpaintingTab";
+import { Play, Palette } from "lucide-react";
 
 interface TabContentProps {
   prompt: string;
@@ -26,6 +28,8 @@ interface TabContentProps {
   onImageLoad: () => void;
   onImageError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   onError: (message: string) => void;
+  activeSubTab: string;
+  setActiveSubTab: (tab: string) => void;
 }
 
 const TabContent = ({
@@ -49,34 +53,64 @@ const TabContent = ({
   onGenerate,
   onImageLoad,
   onImageError,
-  onError
+  onError,
+  activeSubTab,
+  setActiveSubTab
 }: TabContentProps) => {
   return (
     <>
       <TabsContent value="playground" className="space-y-4">
-        <PlaygroundContent
-          prompt={prompt}
-          onPromptChange={onPromptChange}
-          controlImage={controlImage}
-          onControlImageChange={onControlImageChange}
-          width={width}
-          height={height}
-          numInferenceSteps={numInferenceSteps}
-          guidanceScale={guidanceScale}
-          loraScales={loraScales}
-          onWidthChange={onWidthChange}
-          onHeightChange={onHeightChange}
-          onStepsChange={onStepsChange}
-          onGuidanceScaleChange={onGuidanceScaleChange}
-          onLoraScalesChange={onLoraScalesChange}
-          isGenerating={isGenerating}
-          generatedImage={generatedImage}
-          showSuccess={showSuccess}
-          onGenerate={onGenerate}
-          onImageLoad={onImageLoad}
-          onImageError={onImageError}
-          onError={onError}
-        />
+        <Tabs value={activeSubTab} onValueChange={setActiveSubTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 bg-slate-800/50 border-slate-700 mb-6">
+            <TabsTrigger 
+              value="txtTOimg" 
+              className="data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-300 text-slate-400"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              txtTOimg
+            </TabsTrigger>
+            <TabsTrigger 
+              value="inoutpainting" 
+              className="data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-300 text-slate-400"
+            >
+              <Palette className="w-4 h-4 mr-2" />
+              In/Outpainting
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="txtTOimg" className="space-y-4">
+            <PlaygroundContent
+              prompt={prompt}
+              onPromptChange={onPromptChange}
+              controlImage={controlImage}
+              onControlImageChange={onControlImageChange}
+              width={width}
+              height={height}
+              numInferenceSteps={numInferenceSteps}
+              guidanceScale={guidanceScale}
+              loraScales={loraScales}
+              onWidthChange={onWidthChange}
+              onHeightChange={onHeightChange}
+              onStepsChange={onStepsChange}
+              onGuidanceScaleChange={onGuidanceScaleChange}
+              onLoraScalesChange={onLoraScalesChange}
+              isGenerating={isGenerating}
+              generatedImage={generatedImage}
+              showSuccess={showSuccess}
+              onGenerate={onGenerate}
+              onImageLoad={onImageLoad}
+              onImageError={onImageError}
+              onError={onError}
+            />
+          </TabsContent>
+
+          <TabsContent value="inoutpainting" className="space-y-4">
+            <InOutpaintingTab
+              generatedImage={generatedImage}
+              onError={onError}
+            />
+          </TabsContent>
+        </Tabs>
       </TabsContent>
 
       <TabsContent value="documentation" className="space-y-4">

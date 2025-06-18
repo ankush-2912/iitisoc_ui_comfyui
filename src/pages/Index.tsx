@@ -7,9 +7,11 @@ import AppHeader from "@/components/AppHeader";
 import ErrorManager from "@/components/ErrorManager";
 import { useErrorManager } from "@/hooks/useErrorManager";
 import { useImageGeneration } from "@/hooks/useImageGeneration";
+import InOutpaintingTab from "@/components/InOutpaintingTab";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("playground");
+  const [activeSubTab, setActiveSubTab] = useState("txtTOimg");
   const { errors, addError, clearError, clearAllErrors } = useErrorManager();
   const {
     prompt,
@@ -69,6 +71,8 @@ const Index = () => {
               onImageLoad={handleImageLoad}
               onImageError={handleImageError}
               onError={addError}
+              activeSubTab={activeSubTab}
+              setActiveSubTab={setActiveSubTab}
             />
           </Tabs>
         </div>
