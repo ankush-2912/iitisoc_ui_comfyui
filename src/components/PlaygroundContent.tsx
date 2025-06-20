@@ -67,9 +67,6 @@ const PlaygroundContent = ({
         onStepsChange={onStepsChange}
         onGuidanceScaleChange={onGuidanceScaleChange}
         onLoraScalesChange={onLoraScalesChange}
-        isGenerating={isGenerating}
-        showSuccess={showSuccess}
-        onGenerate={onGenerate}
         onError={onError}
       />
 
@@ -79,6 +76,9 @@ const PlaygroundContent = ({
         generatedImage={generatedImage}
         onImageLoad={onImageLoad}
         onImageError={onImageError}
+        showSuccess={showSuccess}
+        onGenerate={onGenerate}
+        prompt={prompt}
       />
     </div>
   );

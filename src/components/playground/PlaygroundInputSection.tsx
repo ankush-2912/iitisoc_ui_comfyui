@@ -5,7 +5,6 @@ import GenerationControls from "../GenerationControls";
 import PipelineStatusPanel from "../PipelineStatusPanel";
 import LoraSection from "../LoraSection";
 import ControlNetManager from "../ControlNetManager";
-import GenerateButton from "../GenerateButton";
 import CollapsibleControls from "../CollapsibleControls";
 import EnhancedCollapsibleSection from "./EnhancedCollapsibleSection";
 import { useSectionManager } from "./SectionManager";
@@ -25,9 +24,6 @@ interface PlaygroundInputSectionProps {
   onStepsChange: (steps: number) => void;
   onGuidanceScaleChange: (scale: number) => void;
   onLoraScalesChange: (scales: Record<string, number>) => void;
-  isGenerating: boolean;
-  showSuccess: boolean;
-  onGenerate: () => void;
   onError?: (message: string) => void;
 }
 
@@ -46,9 +42,6 @@ const PlaygroundInputSection = ({
   onStepsChange,
   onGuidanceScaleChange,
   onLoraScalesChange,
-  isGenerating,
-  showSuccess,
-  onGenerate,
   onError
 }: PlaygroundInputSectionProps) => {
   const {
@@ -127,13 +120,6 @@ const PlaygroundInputSection = ({
           <ControlNetManager />
         </EnhancedCollapsibleSection>
       </div>
-
-      <GenerateButton
-        isGenerating={isGenerating}
-        canGenerate={prompt.trim() !== ''}
-        showSuccess={showSuccess}
-        onGenerate={onGenerate}
-      />
     </div>
   );
 };
