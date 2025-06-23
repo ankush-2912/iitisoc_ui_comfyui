@@ -42,13 +42,13 @@ const ErrorManager = ({ errors, onClearError, onClearAll }: ErrorManagerProps) =
           className="fixed bottom-4 right-4 z-50 bg-red-900/20 border-red-500/30 text-red-300 hover:bg-red-900/40 hover:border-red-500/50 transition-all duration-200 shadow-lg"
         >
           <AlertCircle className="w-4 h-4 mr-2" />
-          Errors
-          <Badge variant="destructive" className="ml-2 bg-red-500 text-white">
-            {errors.length}
-          </Badge>
+
+
+
+
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-slate-800 border-slate-700 text-white max-w-2xl max-h-[80vh]">
+      <DialogContent className="z-[1000] bg-slate-800 border-slate-700 text-white max-w-2xl max-h-[80vh]">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">

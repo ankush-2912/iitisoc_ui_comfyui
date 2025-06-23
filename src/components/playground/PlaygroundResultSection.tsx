@@ -22,7 +22,15 @@ const PlaygroundResultSection = ({
   prompt
 }: PlaygroundResultSectionProps) => {
   return (
-    <div className="space-y-6">
+    <div
+  className="fixed z-[999] bg-[#1e1e2f] rounded-[10px] shadow-lg space-y-6 scale-[0.82] scale-x-[0.95]"
+  style={{
+    top: '130px',      // precise vertical position
+    right: '80px',     // precise horizontal position
+    width: '630px',    // fixed width
+    padding: '10px',   // consistent padding
+  }}
+    >
       <ImageDisplay
         isGenerating={isGenerating}
         generatedImage={generatedImage}

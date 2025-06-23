@@ -14,9 +14,9 @@ const ImageDisplay = ({ isGenerating, generatedImage, onImageLoad, onImageError 
   return (
     <Card className="bg-slate-800/50 border-slate-700 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="scale-x-[0.90] text-white flex items-center gap-2">
           <ImageIcon className="w-5 h-5" />
-          Result
+          Result  
           <Badge variant="secondary" className={`ml-auto transition-all duration-300 ${
             isGenerating 
               ? "bg-orange-500/20 text-orange-300 animate-pulse" 
@@ -29,7 +29,7 @@ const ImageDisplay = ({ isGenerating, generatedImage, onImageLoad, onImageError 
         </CardTitle>
       </CardHeader>
       <CardContent>
-                <div className="w-[555px] h-[400px] bg-slate-900/50 border-2 border-dashed border-slate-600 rounded-lg flex items-center justify-center overflow-hidden relative">
+                <div className="scale-x-[0.90] w-[550px] h-[400px] bg-slate-900/50 border-2 border-dashed border-slate-600 rounded-lg flex items-center justify-center overflow-hidden relative">
           {isGenerating ? (
             <div className="text-center">
               {/* Shimmer loader */}
