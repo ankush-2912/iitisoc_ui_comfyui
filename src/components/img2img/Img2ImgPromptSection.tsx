@@ -16,7 +16,7 @@ interface Img2ImgPromptSectionProps {
 }
 
 const stylePresets = [
-  { value: '', label: 'None' },
+  { value: 'none', label: 'None' },
   { value: 'anime', label: 'Anime' },
   { value: 'cyberpunk', label: 'Cyberpunk' },
   { value: 'artistic', label: 'Artistic' },

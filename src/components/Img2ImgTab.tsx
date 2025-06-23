@@ -19,13 +19,13 @@ const Img2ImgTab = ({ onError }: Img2ImgTabProps) => {
   // Prompt state
   const [prompt, setPrompt] = useState('');
   const [negativePrompt, setNegativePrompt] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState('');
+  const [selectedStyle, setSelectedStyle] = useState('none');
   
   // Model & Adapter state
   const [selectedModel, setSelectedModel] = useState('SD 1.5');
-  const [selectedLora, setSelectedLora] = useState('');
+  const [selectedLora, setSelectedLora] = useState('none');
   const [loraScale, setLoraScale] = useState(0.7);
-  const [selectedControlNet, setSelectedControlNet] = useState('');
+  const [selectedControlNet, setSelectedControlNet] = useState('none');
   const [controlNetEnabled, setControlNetEnabled] = useState(false);
   const [controlNetImage, setControlNetImage] = useState<File | null>(null);
   

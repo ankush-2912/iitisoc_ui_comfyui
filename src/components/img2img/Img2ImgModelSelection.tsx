@@ -31,14 +31,14 @@ const baseModels = [
 ];
 
 const loraOptions = [
-  { value: '', label: 'None' },
+  { value: 'none', label: 'None' },
   { value: 'anime-style', label: 'Anime Style' },
   { value: 'portrait-enhance', label: 'Portrait Enhance' },
   { value: 'landscape-boost', label: 'Landscape Boost' }
 ];
 
 const controlNetOptions = [
-  { value: '', label: 'None' },
+  { value: 'none', label: 'None' },
   { value: 'canny', label: 'Canny Edge' },
   { value: 'depth', label: 'Depth Map' },
   { value: 'pose', label: 'Pose Detection' },
