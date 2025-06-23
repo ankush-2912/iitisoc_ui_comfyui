@@ -4,7 +4,8 @@ import PlaygroundContent from "@/components/PlaygroundContent";
 import DocumentationPanel from "@/components/DocumentationPanel";
 import SystemDashboard from "@/components/SystemDashboard";
 import InOutpaintingTab from "@/components/InOutpaintingTab";
-import { Play, Palette } from "lucide-react";
+import Img2ImgTab from "@/components/Img2ImgTab";
+import { Play, Palette, Image } from "lucide-react";
 
 interface TabContentProps {
   prompt: string;
@@ -61,7 +62,7 @@ const TabContent = ({
     <>
       <TabsContent value="playground" className="space-y-4">
         <Tabs value={activeSubTab} onValueChange={setActiveSubTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-slate-800/50 border-slate-700 mb-6">
+          <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 border-slate-700 mb-6">
             <TabsTrigger 
               value="txtTOimg" 
               className="data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-300 text-slate-400"
@@ -75,6 +76,13 @@ const TabContent = ({
             >
               <Palette className="w-4 h-4 mr-2" />
               In/Outpainting
+            </TabsTrigger>
+            <TabsTrigger 
+              value="img2img" 
+              className="data-[state=active]:bg-purple-600/20 data-[state=active]:text-purple-300 text-slate-400"
+            >
+              <Image className="w-4 h-4 mr-2" />
+              img2img
             </TabsTrigger>
           </TabsList>
 
@@ -107,6 +115,12 @@ const TabContent = ({
           <TabsContent value="inoutpainting" className="space-y-4">
             <InOutpaintingTab
               generatedImage={generatedImage}
+              onError={onError}
+            />
+          </TabsContent>
+
+          <TabsContent value="img2img" className="space-y-4">
+            <Img2ImgTab
               onError={onError}
             />
           </TabsContent>

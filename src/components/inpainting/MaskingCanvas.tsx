@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { Brush, Eraser, RotateCcw, Undo2, Redo2, Eye, EyeOff, ZoomIn, ZoomOut } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Brush, Eraser, RotateCcw, Undo2, Redo2, Eye, EyeOff, ZoomIn, ZoomOut, Settings } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 interface MaskingCanvasProps {
@@ -21,6 +23,12 @@ const MaskingCanvas = ({ inputImage, mode, onMaskChange }: MaskingCanvasProps) =
   const [isDrawing, setIsDrawing] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  
+  // Canvas size controls for outpainting
+  const [canvasWidth, setCanvasWidth] = useState(512);
+  const [canvasHeight, setCanvasHeight] = useState(512);
+  const [extensionPadding, setExtensionPadding] = useState(128);
+  const [originalImageDimensions, setOriginalImageDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     if (canvasRef.current && inputImage) {
@@ -30,14 +38,42 @@ const MaskingCanvas = ({ inputImage, mode, onMaskChange }: MaskingCanvasProps) =
 
       const img = new Image();
       img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+        setOriginalImageDimensions({ width: img.width, height: img.height });
+        
+        if (mode === 'outpainting') {
+          // For outpainting, create extended canvas
+          const extendedWidth = img.width + (extensionPadding * 2);
+          const extendedHeight = img.height + (extensionPadding * 2);
+          
+          canvas.width = extendedWidth;
+          canvas.height = extendedHeight;
+          setCanvasWidth(extendedWidth);
+          setCanvasHeight(extendedHeight);
+          
+          // Clear canvas and draw image in center
+          ctx.fillStyle = '#1e1e2f';
+          ctx.fillRect(0, 0, extendedWidth, extendedHeight);
+          ctx.drawImage(img, extensionPadding, extensionPadding);
+          
+          // Draw extension area indicators
+          ctx.strokeStyle = 'rgba(147, 51, 234, 0.5)';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 5]);
+          ctx.strokeRect(extensionPadding, extensionPadding, img.width, img.height);
+        } else {
+          // For inpainting, use original image size
+          canvas.width = img.width;
+          canvas.height = img.height;
+          setCanvasWidth(img.width);
+          setCanvasHeight(img.height);
+          ctx.drawImage(img, 0, 0);
+        }
+        
         saveToHistory();
       };
       img.src = inputImage;
     }
-  }, [inputImage]);
+  }, [inputImage, mode, extensionPadding]);
 
   const saveToHistory = () => {
     if (!canvasRef.current) return;
@@ -86,8 +122,54 @@ const MaskingCanvas = ({ inputImage, mode, onMaskChange }: MaskingCanvasProps) =
 
     const img = new Image();
     img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
+      if (mode === 'outpainting') {
+        const extendedWidth = originalImageDimensions.width + (extensionPadding * 2);
+        const extendedHeight = originalImageDimensions.height + (extensionPadding * 2);
+        
+        canvas.width = extendedWidth;
+        canvas.height = extendedHeight;
+        
+        ctx.fillStyle = '#1e1e2f';
+        ctx.fillRect(0, 0, extendedWidth, extendedHeight);
+        ctx.drawImage(img, extensionPadding, extensionPadding);
+        
+        ctx.strokeStyle = 'rgba(147, 51, 234, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeRect(extensionPadding, extensionPadding, originalImageDimensions.width, originalImageDimensions.height);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      }
+      saveToHistory();
+    };
+    img.src = inputImage;
+  };
+
+  const updateCanvasSize = () => {
+    if (!canvasRef.current || mode !== 'outpainting') return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Save current canvas state
+    const currentImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    
+    // Resize canvas
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    
+    // Restore image data (centered)
+    const offsetX = (canvasWidth - originalImageDimensions.width) / 2;
+    const offsetY = (canvasHeight - originalImageDimensions.height) / 2;
+    
+    ctx.fillStyle = '#1e1e2f';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, offsetX, offsetY);
       saveToHistory();
     };
     img.src = inputImage;
@@ -135,6 +217,62 @@ const MaskingCanvas = ({ inputImage, mode, onMaskChange }: MaskingCanvasProps) =
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Canvas Size Controls for Outpainting */}
+        {mode === 'outpainting' && (
+          <Card className="bg-slate-900/50 border-slate-600">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white text-sm flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Canvas Size Controls
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-300 text-sm">Canvas Width</Label>
+                  <Input
+                    type="number"
+                    value={canvasWidth}
+                    onChange={(e) => setCanvasWidth(parseInt(e.target.value) || 512)}
+                    className="bg-slate-800 border-slate-600 text-white"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-slate-300 text-sm">Canvas Height</Label>
+                  <Input
+                    type="number"
+                    value={canvasHeight}
+                    onChange={(e) => setCanvasHeight(parseInt(e.target.value) || 512)}
+                    className="bg-slate-800 border-slate-600 text-white"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-slate-300 text-sm">Extension Padding</Label>
+                  <span className="text-slate-400 text-sm">{extensionPadding}px</span>
+                </div>
+                <Slider
+                  value={[extensionPadding]}
+                  onValueChange={(value) => setExtensionPadding(value[0])}
+                  min={64}
+                  max={256}
+                  step={32}
+                  className="cursor-pointer"
+                />
+              </div>
+              
+              <Button
+                onClick={updateCanvasSize}
+                className="w-full bg-purple-600 hover:bg-purple-700"
+              >
+                Apply Canvas Size
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Tools */}
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex gap-2">
@@ -247,7 +385,11 @@ const MaskingCanvas = ({ inputImage, mode, onMaskChange }: MaskingCanvasProps) =
 
         <div className="text-center text-slate-400 text-sm">
           Click and drag to {tool === 'brush' ? 'paint mask' : 'erase mask'} • 
-          Zoom: {Math.round(zoom * 100)}%
+          Zoom: {Math.round(zoom * 100)}% • 
+          Canvas: {canvasWidth}x{canvasHeight}
+          {mode === 'outpainting' && (
+            <span> • Original: {originalImageDimensions.width}x{originalImageDimensions.height}</span>
+          )}
         </div>
       </CardContent>
     </Card>
