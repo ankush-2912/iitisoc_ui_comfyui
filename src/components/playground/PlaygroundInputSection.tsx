@@ -7,6 +7,7 @@ import LoraSection from "../LoraSection";
 import ControlNetManager from "../ControlNetManager";
 import CollapsibleControls from "../CollapsibleControls";
 import EnhancedCollapsibleSection from "./EnhancedCollapsibleSection";
+import AutomaticGeneration from "./AutomaticGeneration";
 import { useSectionManager } from "./SectionManager";
 
 interface PlaygroundInputSectionProps {
@@ -120,6 +121,12 @@ const PlaygroundInputSection = ({
           <ControlNetManager />
         </EnhancedCollapsibleSection>
       </div>
+
+      {/* Automatic Generation Panel */}
+      <AutomaticGeneration
+        prompt={prompt}
+        onError={onError || (() => {})}
+      />
     </div>
   );
 };
