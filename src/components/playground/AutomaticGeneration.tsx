@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -56,7 +55,7 @@ const AutomaticGeneration = ({ prompt, onError }: AutomaticGenerationProps) => {
 
   return (
     <Card className="bg-slate-800/50 border-slate-700">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 mt-[-21px] h-[70px]">
         <Button
           onClick={() => setIsExpanded(!isExpanded)}
           variant="ghost"
@@ -79,7 +78,7 @@ const AutomaticGeneration = ({ prompt, onError }: AutomaticGenerationProps) => {
           isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <CardContent className="bg-gray-800 mx-4 mb-4 p-4 rounded-lg space-y-4">
+        <CardContent className="bg-gray-800 mx-4 mb-4 p-4 rounded-lg space-y-4">"
           {/* Number of Steps */}
           <div className="space-y-2">
             <Label className="text-slate-300 text-sm">Number of Steps</Label>

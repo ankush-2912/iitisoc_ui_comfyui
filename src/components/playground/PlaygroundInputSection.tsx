@@ -1,4 +1,3 @@
-
 import { Settings, Activity, Layers, Grid3X3 } from "lucide-react";
 import PromptInput from "../PromptInput";
 import GenerationControls from "../GenerationControls";
@@ -62,6 +61,11 @@ const PlaygroundInputSection = ({
         onControlImageChange={onControlImageChange}
       />
 
+      <AutomaticGeneration
+        prompt={prompt}
+        onError={onError || (() => {})}
+      />
+
       <CollapsibleControls
         onExpandAll={handleExpandAll}
         onCollapseAll={handleCollapseAll}
@@ -121,12 +125,6 @@ const PlaygroundInputSection = ({
           <ControlNetManager />
         </EnhancedCollapsibleSection>
       </div>
-
-      {/* Automatic Generation Panel */}
-      <AutomaticGeneration
-        prompt={prompt}
-        onError={onError || (() => {})}
-      />
     </div>
   );
 };
