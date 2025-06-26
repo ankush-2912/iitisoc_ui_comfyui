@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,12 +36,13 @@ const CollapsibleSection = ({
   };
 
   return (
-    <Card className={`bg-slate-800/50 border-slate-700 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 ${className}`}>
+    <Card className={`bg-slate-800/50 border-slate-700 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300  ${className}`}>
       <CardHeader className="pb-2">
+        {/* To manually adjust the vertical position of this button, change the mt-[-8px] value below */}
         <Button
-          variant="ghost"
           onClick={handleToggle}
-          className="w-full flex items-center justify-between p-3 h-auto text-white hover:bg-slate-700/50 rounded-lg transition-all duration-300 group"
+          variant="ghost"
+          className="w-full flex items-center justify-between p-3 h-auto text-white hover:bg-slate-700/50 rounded-lg transition-all duration-300 group mt-[-16px]"
         >
           <div className="flex items-center gap-3">
             <div className="transition-colors duration-300 group-hover:text-purple-300">

@@ -73,6 +73,8 @@ const Img2ImgModelSelection = ({
   };
 
   return (
+    // To manually adjust the height of this section, change the h-[450px] value below.
+    // For example, use h-[500px] to make it taller or h-auto to fit content automatically.
     <Card className="bg-slate-800/50 border-slate-700">
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">

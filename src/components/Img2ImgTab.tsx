@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Img2ImgImageInput from '@/components/img2img/Img2ImgImageInput';
 import Img2ImgPromptSection from '@/components/img2img/Img2ImgPromptSection';
@@ -6,6 +5,9 @@ import Img2ImgModelSelection from '@/components/img2img/Img2ImgModelSelection';
 import Img2ImgControls from '@/components/img2img/Img2ImgControls';
 import Img2ImgPreview from '@/components/img2img/Img2ImgPreview';
 import Img2ImgPostGeneration from '@/components/img2img/Img2ImgPostGeneration';
+import { getApiUrl } from '@/config/backend';
+import CollapsibleSection from './CollapsibleSection';
+import { Settings } from 'lucide-react';
 
 interface Img2ImgTabProps {
   onError: (message: string) => void;
@@ -53,12 +55,58 @@ const Img2ImgTab = ({ onError }: Img2ImgTabProps) => {
     const startTime = Date.now();
     
     try {
-      // Simulate API call for now
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Create FormData for multipart/form-data request
+      const formData = new FormData();
       
-      setGeneratedImage(inputImage); // Placeholder - would be actual generated result
+      // Add text fields
+      formData.append('prompt', prompt);
+      formData.append('base_model', selectedModel);
+      formData.append('denoising_strength', denoisingStrength.toString());
+      formData.append('cfg_scale', cfgScale.toString());
+      formData.append('num_inference_steps', inferenceSteps.toString());
+      
+      // Add optional fields
+      if (selectedLora !== 'none') {
+        formData.append('lora_adapter', selectedLora);
+      }
+      if (controlNetEnabled && selectedControlNet !== 'none') {
+        formData.append('controlnet_path', selectedControlNet);
+      }
+      if (seed !== null) {
+        formData.append('seed', seed.toString());
+      }
+      
+      // Convert base64 image to blob and add as file
+      const response = await fetch(inputImage);
+      const blob = await response.blob();
+      formData.append('init_image', blob, 'init_image.png');
+      
+      // Add control image if available
+      if (controlNetEnabled && controlNetImage) {
+        formData.append('control_image', controlNetImage, 'control_image.png');
+      }
+      
+      // Send request to backend
+      const apiResponse = await fetch(getApiUrl('/generate-img2img-image/'), {
+        method: 'POST',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: formData
+      });
+      
+      if (!apiResponse.ok) {
+        throw new Error(`API request failed: ${apiResponse.status}`);
+      }
+      
+      // Handle response - assuming it returns a base64 image
+      const responseBlob = await apiResponse.blob();
+      const imageUrl = URL.createObjectURL(responseBlob);
+      
+      setGeneratedImage(imageUrl);
       setGenerationTime((Date.now() - startTime) / 1000);
     } catch (error) {
+      console.error('Generation error:', error);
       onError('Failed to generate img2img result');
     } finally {
       setIsGenerating(false);
@@ -92,40 +140,49 @@ const Img2ImgTab = ({ onError }: Img2ImgTabProps) => {
           />
 
           {/* Model & Adapter Selection */}
-          <Img2ImgModelSelection
-            selectedModel={selectedModel}
-            selectedLora={selectedLora}
-            loraScale={loraScale}
-            selectedControlNet={selectedControlNet}
-            controlNetEnabled={controlNetEnabled}
-            controlNetImage={controlNetImage}
-            onModelChange={setSelectedModel}
-            onLoraChange={setSelectedLora}
-            onLoraScaleChange={setLoraScale}
-            onControlNetChange={setSelectedControlNet}
-            onControlNetEnabledChange={setControlNetEnabled}
-            onControlNetImageChange={setControlNetImage}
-            onError={onError}
-          />
+          <CollapsibleSection
+            title="Model & Adapter Selection"
+            icon={<Settings className="w-5 h-5" />}
+            defaultOpen={false}
+          >
+            <Img2ImgModelSelection
+              selectedModel={selectedModel}
+              selectedLora={selectedLora}
+              loraScale={loraScale}
+              selectedControlNet={selectedControlNet}
+              controlNetEnabled={controlNetEnabled}
+              controlNetImage={controlNetImage}
+              onModelChange={setSelectedModel}
+              onLoraChange={setSelectedLora}
+              onLoraScaleChange={setLoraScale}
+              onControlNetChange={setSelectedControlNet}
+              onControlNetEnabledChange={setControlNetEnabled}
+              onControlNetImageChange={setControlNetImage}
+              onError={onError}
+            />
+          </CollapsibleSection>
 
           {/* Generation Controls */}
-          <Img2ImgControls
-            denoisingStrength={denoisingStrength}
-            cfgScale={cfgScale}
-            inferenceSteps={inferenceSteps}
-            seed={seed}
-            autoDetectResolution={autoDetectResolution}
-            onDenoisingStrengthChange={setDenoisingStrength}
-            onCfgScaleChange={setCfgScale}
-            onInferenceStepsChange={setInferenceSteps}
-            onSeedChange={setSeed}
-            onAutoDetectResolutionChange={setAutoDetectResolution}
-            onRandomizeSeed={randomizeSeed}
-            isGenerating={isGenerating}
-            canGenerate={!!(inputImage && prompt.trim())}
-            onGenerate={handleGenerate}
-            generationTime={generationTime}
-          />
+          <CollapsibleSection
+            title="Image-to-Image Controls"
+            icon={<Settings className="w-5 h-5" />}
+            defaultOpen={false}
+          >
+            <Img2ImgControls
+              denoisingStrength={denoisingStrength}
+              cfgScale={cfgScale}
+              inferenceSteps={inferenceSteps}
+              seed={seed}
+              autoDetectResolution={autoDetectResolution}
+              onDenoisingStrengthChange={setDenoisingStrength}
+              onCfgScaleChange={setCfgScale}
+              onInferenceStepsChange={setInferenceSteps}
+              onSeedChange={setSeed}
+              onAutoDetectResolutionChange={setAutoDetectResolution}
+              onRandomizeSeed={randomizeSeed}
+              isGenerating={isGenerating}
+            />
+          </CollapsibleSection>
         </div>
 
         {/* Right Column - Preview & Results */}
@@ -137,6 +194,9 @@ const Img2ImgTab = ({ onError }: Img2ImgTabProps) => {
             isGenerating={isGenerating}
             previewMode={previewMode}
             onPreviewModeChange={setPreviewMode}
+            canGenerate={!!(inputImage && prompt.trim())}
+            onGenerate={handleGenerate}
+            generationTime={generationTime}
           />
 
           {/* Post-Generation Controls */}

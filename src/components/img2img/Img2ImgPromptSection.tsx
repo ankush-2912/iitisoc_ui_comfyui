@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,41 +55,6 @@ const Img2ImgPromptSection = ({
             onChange={(e) => onPromptChange(e.target.value)}
             className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 min-h-[100px]"
           />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="negative-prompt" className="text-slate-300">
-            Negative Prompt
-          </Label>
-          <Textarea
-            id="negative-prompt"
-            placeholder="Describe what you don't want to see..."
-            value={negativePrompt}
-            onChange={(e) => onNegativePromptChange(e.target.value)}
-            className="bg-slate-900/50 border-slate-600 text-white placeholder-slate-400 min-h-[80px]"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="style-preset" className="text-slate-300">
-            Style Preset
-          </Label>
-          <Select value={selectedStyle} onValueChange={onStyleChange}>
-            <SelectTrigger className="bg-slate-900/50 border-slate-600 text-white">
-              <SelectValue placeholder="Choose a style preset..." />
-            </SelectTrigger>
-            <SelectContent className="bg-slate-800 border-slate-600">
-              {stylePresets.map((style) => (
-                <SelectItem 
-                  key={style.value} 
-                  value={style.value}
-                  className="text-white hover:bg-slate-700"
-                >
-                  {style.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </CardContent>
     </Card>

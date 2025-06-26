@@ -1,8 +1,7 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, Maximize2, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Eye, Maximize2, Image as ImageIcon, Loader2, Play } from "lucide-react";
 import { useState } from "react";
 
 interface Img2ImgPreviewProps {
@@ -11,6 +10,9 @@ interface Img2ImgPreviewProps {
   isGenerating: boolean;
   previewMode: 'side-by-side' | 'overlay' | 'stacked';
   onPreviewModeChange: (mode: 'side-by-side' | 'overlay' | 'stacked') => void;
+  canGenerate: boolean;
+  onGenerate: () => void;
+  generationTime: number | null;
 }
 
 const Img2ImgPreview = ({
@@ -18,7 +20,10 @@ const Img2ImgPreview = ({
   generatedImage,
   isGenerating,
   previewMode,
-  onPreviewModeChange
+  onPreviewModeChange,
+  canGenerate,
+  onGenerate,
+  generationTime
 }: Img2ImgPreviewProps) => {
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -164,6 +169,35 @@ const Img2ImgPreview = ({
 
         {/* Preview Area */}
         {renderPreview()}
+
+        {/* Generate Button and Generation Time */}
+        <div className="space-y-3 pt-4 border-t border-slate-600">
+          <Button
+            onClick={onGenerate}
+            disabled={!canGenerate || isGenerating}
+            className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 h-12"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Play className="w-4 h-4 mr-2" />
+                Generate Image
+              </>
+            )}
+          </Button>
+
+          {generationTime && (
+            <div className="text-center">
+              <Badge variant="secondary" className="bg-slate-700 text-slate-300">
+                Generation time: {generationTime.toFixed(1)}s
+              </Badge>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

@@ -11,7 +11,7 @@
  * - Production: "https://your-api-domain.com"
  */
 
-export const BACKEND_URL = "https://68f5-34-16-214-237.ngrok-free.app";
+export const BACKEND_URL = "https://b469-43-204-216-142.ngrok-free.app";
 
 /**
  * Backend configuration object with additional settings

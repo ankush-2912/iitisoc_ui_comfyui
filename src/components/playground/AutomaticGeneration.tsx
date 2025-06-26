@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDown, ChevronUp, Zap } from "lucide-react";
 import { useState } from "react";
+import { getApiUrl } from "@/config/backend";
 
 interface AutomaticGenerationProps {
   prompt: string;
@@ -32,7 +33,7 @@ const AutomaticGeneration = ({ prompt, onError }: AutomaticGenerationProps) => {
       }
       formData.append('include_metadata', includeMetadata.toString());
 
-      const response = await fetch('/generate-image-automatic/', {
+      const response = await fetch(getApiUrl('/generate-image-automatic/'), {
         method: 'POST',
         body: formData
       });

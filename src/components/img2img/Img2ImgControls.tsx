@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -137,35 +136,6 @@ const Img2ImgControls = ({
             checked={autoDetectResolution}
             onCheckedChange={onAutoDetectResolutionChange}
           />
-        </div>
-
-        {/* Generate Button */}
-        <div className="space-y-3 pt-4 border-t border-slate-600">
-          <Button
-            onClick={onGenerate}
-            disabled={!canGenerate || isGenerating}
-            className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 h-12"
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <Play className="w-4 h-4 mr-2" />
-                Generate Image
-              </>
-            )}
-          </Button>
-
-          {generationTime && (
-            <div className="text-center">
-              <Badge variant="secondary" className="bg-slate-700 text-slate-300">
-                Generation time: {generationTime.toFixed(1)}s
-              </Badge>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>

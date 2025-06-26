@@ -416,7 +416,7 @@ const ControlNetManager = () => {
                       )}
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="bg-slate-800 border-slate-700">
+                  <AlertDialogContent className="z-[9999] bg-slate-800 border-slate-700">
                     <AlertDialogHeader>
                       <AlertDialogTitle className="text-white">Confirm Unload</AlertDialogTitle>
                       <AlertDialogDescription className="text-slate-300">
