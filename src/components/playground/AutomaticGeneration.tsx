@@ -10,9 +10,11 @@ import { getApiUrl } from "@/config/backend";
 interface AutomaticGenerationProps {
   prompt: string;
   onError: (message: string) => void;
+  setGeneratedImage: (img: string) => void;
+  setAutoGenMetadata: (metadata: any) => void;
 }
 
-const AutomaticGeneration = ({ prompt, onError }: AutomaticGenerationProps) => {
+const AutomaticGeneration = ({ prompt, onError, setGeneratedImage, setAutoGenMetadata }: AutomaticGenerationProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [autoGenSteps, setAutoGenSteps] = useState(4);
   const [autoGenSeed, setAutoGenSeed] = useState<string>('');
@@ -46,6 +48,9 @@ const AutomaticGeneration = ({ prompt, onError }: AutomaticGenerationProps) => {
       const result = await response.json();
       console.log('Auto generation result:', result);
       
+      const imageUrl = "data:image/png;base64," + result.image_base64;
+      setGeneratedImage(imageUrl);
+      setAutoGenMetadata(result.metadata);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Auto generation failed';
       setAutoGenError(errorMessage);

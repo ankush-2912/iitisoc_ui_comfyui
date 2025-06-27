@@ -91,7 +91,7 @@ const InOutpaintingTab = ({ generatedImage, onError }: InOutpaintingTabProps) =>
         ...backendConfig.headers
       };
 
-      const response = await fetch(getApiUrl('/generate-image/'), {
+      const response = await fetch(getApiUrl('/generate-image-inpainting/'), {
         method: 'POST',
         headers: headers,
         body: formData

@@ -25,6 +25,8 @@ interface PlaygroundInputSectionProps {
   onGuidanceScaleChange: (scale: number) => void;
   onLoraScalesChange: (scales: Record<string, number>) => void;
   onError?: (message: string) => void;
+  setGeneratedImage: (img: string) => void;
+  setAutoGenMetadata: (metadata: any) => void;
 }
 
 const PlaygroundInputSection = ({
@@ -42,7 +44,9 @@ const PlaygroundInputSection = ({
   onStepsChange,
   onGuidanceScaleChange,
   onLoraScalesChange,
-  onError
+  onError,
+  setGeneratedImage,
+  setAutoGenMetadata
 }: PlaygroundInputSectionProps) => {
   const {
     openSections,
@@ -64,6 +68,8 @@ const PlaygroundInputSection = ({
       <AutomaticGeneration
         prompt={prompt}
         onError={onError || (() => {})}
+        setGeneratedImage={setGeneratedImage}
+        setAutoGenMetadata={setAutoGenMetadata}
       />
 
       <CollapsibleControls

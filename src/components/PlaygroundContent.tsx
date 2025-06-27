@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 import PlaygroundInputSection from "./playground/PlaygroundInputSection";
 import PlaygroundResultSection from "./playground/PlaygroundResultSection";
 
@@ -49,6 +49,8 @@ const PlaygroundContent = ({
   onImageError,
   onError
 }: PlaygroundContentProps) => {
+  const [generatedImageState, setGeneratedImage] = useState<string | null>(generatedImage || null);
+  const [autoGenMetadata, setAutoGenMetadata] = useState<any>(null);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Input Section */}
@@ -68,17 +70,20 @@ const PlaygroundContent = ({
         onGuidanceScaleChange={onGuidanceScaleChange}
         onLoraScalesChange={onLoraScalesChange}
         onError={onError}
+        setGeneratedImage={setGeneratedImage}
+        setAutoGenMetadata={setAutoGenMetadata}
       />
 
       {/* Result Section */}
       <PlaygroundResultSection
         isGenerating={isGenerating}
-        generatedImage={generatedImage}
+        generatedImage={generatedImageState}
         onImageLoad={onImageLoad}
         onImageError={onImageError}
         showSuccess={showSuccess}
         onGenerate={onGenerate}
         prompt={prompt}
+        autoGenMetadata={autoGenMetadata}
       />
     </div>
   );
