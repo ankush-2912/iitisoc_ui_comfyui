@@ -7,9 +7,10 @@ interface PlaygroundResultSectionProps {
   onImageLoad: () => void;
   onImageError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   showSuccess: boolean;
-  onGenerate: () => void;
+  onGenerate: (model: string) => void;
   prompt: string;
   autoGenMetadata?: any;
+  selectedModel: string;
 }
 
 const PlaygroundResultSection = ({
@@ -20,7 +21,8 @@ const PlaygroundResultSection = ({
   showSuccess,
   onGenerate,
   prompt,
-  autoGenMetadata
+  autoGenMetadata,
+  selectedModel
 }: PlaygroundResultSectionProps) => {
   return (
     <div className="space-y-6">
@@ -35,7 +37,7 @@ const PlaygroundResultSection = ({
         isGenerating={isGenerating}
         canGenerate={prompt.trim() !== ''}
         showSuccess={showSuccess}
-        onGenerate={onGenerate}
+        onGenerate={() => onGenerate(selectedModel)}
       />
       {autoGenMetadata && (
         <details className="mt-4 p-4 bg-gray-700 rounded-lg">

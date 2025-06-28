@@ -12,9 +12,10 @@ interface AutomaticGenerationProps {
   onError: (message: string) => void;
   setGeneratedImage: (img: string) => void;
   setAutoGenMetadata: (metadata: any) => void;
+  selectedModel: string;
 }
 
-const AutomaticGeneration = ({ prompt, onError, setGeneratedImage, setAutoGenMetadata }: AutomaticGenerationProps) => {
+const AutomaticGeneration = ({ prompt, onError, setGeneratedImage, setAutoGenMetadata, selectedModel }: AutomaticGenerationProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [autoGenSteps, setAutoGenSteps] = useState(4);
   const [autoGenSeed, setAutoGenSeed] = useState<string>('');
@@ -34,6 +35,7 @@ const AutomaticGeneration = ({ prompt, onError, setGeneratedImage, setAutoGenMet
         formData.append('seed', autoGenSeed);
       }
       formData.append('include_metadata', includeMetadata.toString());
+      formData.append('model', selectedModel);
 
       const response = await fetch(getApiUrl('/generate-image-automatic/'), {
         method: 'POST',

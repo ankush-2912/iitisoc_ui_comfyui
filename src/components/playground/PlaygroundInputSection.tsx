@@ -8,6 +8,10 @@ import CollapsibleControls from "../CollapsibleControls";
 import EnhancedCollapsibleSection from "./EnhancedCollapsibleSection";
 import AutomaticGeneration from "./AutomaticGeneration";
 import { useSectionManager } from "./SectionManager";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
+import { Button } from "../ui/button";
+import { ChevronDown, Zap } from "lucide-react";
+import { useState } from "react";
 
 interface PlaygroundInputSectionProps {
   prompt: string;
@@ -27,7 +31,16 @@ interface PlaygroundInputSectionProps {
   onError?: (message: string) => void;
   setGeneratedImage: (img: string) => void;
   setAutoGenMetadata: (metadata: any) => void;
+  selectedModel: string;
+  setSelectedModel: (model: string) => void;
 }
+
+const modelOptions = [
+  "SDXL_Base",
+  "SDXL_Distilled",
+  "SD1.5_Base",
+  "SD1.5_Distilled"
+];
 
 const PlaygroundInputSection = ({
   prompt,
@@ -46,7 +59,9 @@ const PlaygroundInputSection = ({
   onLoraScalesChange,
   onError,
   setGeneratedImage,
-  setAutoGenMetadata
+  setAutoGenMetadata,
+  selectedModel,
+  setSelectedModel
 }: PlaygroundInputSectionProps) => {
   const {
     openSections,
@@ -55,6 +70,9 @@ const PlaygroundInputSection = ({
     toggleSection,
     openSectionCount
   } = useSectionManager();
+
+  // Collapsible logic for the two panels
+  const [openPanel, setOpenPanel] = useState<'model' | 'auto' | null>(null);
 
   return (
     <div className="space-y-6">
@@ -65,12 +83,65 @@ const PlaygroundInputSection = ({
         onControlImageChange={onControlImageChange}
       />
 
-      <AutomaticGeneration
-        prompt={prompt}
-        onError={onError || (() => {})}
-        setGeneratedImage={setGeneratedImage}
-        setAutoGenMetadata={setAutoGenMetadata}
-      />
+      {/* Two horizontally stacked buttons */}
+      <div className="flex flex-row gap-2 w-full">
+        {/* Dropdown Button */}
+        <Button
+          variant={openPanel === 'model' ? 'secondary' : 'outline'}
+          className="w-1/2 flex items-center justify-between bg-slate-800/50 border border-slate-700 hover:bg-slate-700/50 text-white"
+          onClick={() => setOpenPanel(openPanel === 'model' ? null : 'model')}
+        >
+          <span className="flex items-center gap-2">
+            <ChevronDown className="w-4 h-4 text-purple-400" />
+            <span className="text-sm font-medium">Select Model</span>
+          </span>
+          <span className="ml-2 text-xs text-purple-300">{selectedModel}</span>
+        </Button>
+        {/* Automatic Generation Button */}
+        <Button
+          variant={openPanel === 'auto' ? 'secondary' : 'outline'}
+          className="w-1/2 flex items-center justify-between bg-slate-800/50 border border-slate-700 hover:bg-slate-700/50 text-white"
+          onClick={() => setOpenPanel(openPanel === 'auto' ? null : 'auto')}
+        >
+          <span className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-purple-400" />
+            <span className="text-sm font-medium">Automatic Generation</span>
+          </span>
+        </Button>
+      </div>
+      {/* Panels (only one open at a time) */}
+      <div className="w-full">
+        {openPanel === 'model' && (
+          <div className="w-full bg-slate-800/50 border border-slate-700 rounded-lg p-4 mt-2">
+            <Select value={selectedModel} onValueChange={setSelectedModel}>
+            <SelectTrigger className="w-full bg-transparent border border-slate-700 text-white hover:bg-slate-700/30 rounded-lg px-4 py-2 text-sm">
+                <SelectValue placeholder="Select a model" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border border-slate-700 text-white rounded-lg shadow-lg">
+                {modelOptions.map((model) => (
+                  <SelectItem
+  value={model}
+  className="bg-slate-800 text-white hover:bg-slate-700/40 px-4 py-2 text-sm"
+>
+  {model}
+</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+        {openPanel === 'auto' && (
+          <div className="w-full mt-2">
+            <AutomaticGeneration
+              prompt={prompt}
+              onError={onError || (() => {})}
+              setGeneratedImage={setGeneratedImage}
+              setAutoGenMetadata={setAutoGenMetadata}
+              selectedModel={selectedModel}
+            />
+          </div>
+        )}
+      </div>
 
       <CollapsibleControls
         onExpandAll={handleExpandAll}

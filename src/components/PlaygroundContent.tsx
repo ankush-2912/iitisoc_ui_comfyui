@@ -20,7 +20,7 @@ interface PlaygroundContentProps {
   isGenerating: boolean;
   generatedImage: string | null;
   showSuccess: boolean;
-  onGenerate: () => void;
+  onGenerate: (model: string) => void;
   onImageLoad: () => void;
   onImageError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   onError?: (message: string) => void;
@@ -51,6 +51,14 @@ const PlaygroundContent = ({
 }: PlaygroundContentProps) => {
   const [generatedImageState, setGeneratedImage] = useState<string | null>(generatedImage || null);
   const [autoGenMetadata, setAutoGenMetadata] = useState<any>(null);
+  const [selectedModel, setSelectedModel] = useState<string>("SDXL Base");
+
+  const handleGenerate = () => {
+    if (typeof onGenerate === 'function') {
+      onGenerate(selectedModel);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Input Section */}
@@ -72,6 +80,8 @@ const PlaygroundContent = ({
         onError={onError}
         setGeneratedImage={setGeneratedImage}
         setAutoGenMetadata={setAutoGenMetadata}
+        selectedModel={selectedModel}
+        setSelectedModel={setSelectedModel}
       />
 
       {/* Result Section */}
@@ -81,9 +91,10 @@ const PlaygroundContent = ({
         onImageLoad={onImageLoad}
         onImageError={onImageError}
         showSuccess={showSuccess}
-        onGenerate={onGenerate}
+        onGenerate={handleGenerate}
         prompt={prompt}
         autoGenMetadata={autoGenMetadata}
+        selectedModel={selectedModel}
       />
     </div>
   );

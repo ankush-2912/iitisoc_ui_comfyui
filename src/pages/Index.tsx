@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs } from "@/components/ui/tabs";
 import TabNavigation from "@/components/TabNavigation";
@@ -36,8 +35,8 @@ const Index = () => {
     handleImageError
   } = useImageGeneration();
 
-  const onGenerate = () => {
-    handleGenerate(addError);
+  const onGenerate = (selectedModel?: string) => {
+    handleGenerate(addError, selectedModel);
   };
 
   return (

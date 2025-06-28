@@ -9,7 +9,7 @@ interface PromptInputProps {
   prompt: string;
   onPromptChange: (prompt: string) => void;
   controlImage: File | null;
-  onControlImageChange: (file: File | null) => void;
+  onControlImageChange: (file: File | null) => void;  
 }
 
 const PromptInput = ({ prompt, onPromptChange, controlImage, onControlImageChange }: PromptInputProps) => {
