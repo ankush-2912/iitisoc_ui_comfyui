@@ -41,7 +41,18 @@ const Index = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-background">
+      {/* Background Spline 3D iframe */}
+      <div className="fixed inset-0 z-0">
+        <iframe 
+          src='https://my.spline.design/orb-ufOJhVbQaq8FQkACMyY7Dxf1/' 
+          frameBorder='0' 
+          width='100%' 
+          height='100%'
+          className="pointer-events-none"
+        />
+      </div>
+      
+      <div className="min-h-screen bg-transparent relative z-10">
         <div className="container mx-auto p-4">
           <AppHeader />
 
