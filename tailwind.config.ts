@@ -62,10 +62,10 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				neon: {
-					primary: 'hsl(var(--neon-primary))',
-					secondary: 'hsl(var(--neon-secondary))',
-					glow: 'hsl(var(--neon-glow))'
+				space: {
+					primary: 'hsl(var(--space-primary))',
+					secondary: 'hsl(var(--space-secondary))',
+					border: 'hsl(var(--space-border))'
 				}
 			},
 			borderRadius: {
