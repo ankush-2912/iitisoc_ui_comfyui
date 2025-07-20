@@ -181,6 +181,9 @@ const Img2ImgTab = ({ onError }: Img2ImgTabProps) => {
               onAutoDetectResolutionChange={setAutoDetectResolution}
               onRandomizeSeed={randomizeSeed}
               isGenerating={isGenerating}
+              canGenerate={!!(inputImage && prompt.trim())}
+              onGenerate={handleGenerate}
+              generationTime={generationTime}
             />
           </CollapsibleSection>
         </div>

@@ -41,7 +41,7 @@ const Index = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto p-4">
           <AppHeader />
 

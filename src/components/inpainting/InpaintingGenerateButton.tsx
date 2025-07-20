@@ -36,20 +36,21 @@ const InpaintingGenerateButton = ({
           onClick={onGenerate}
           onMouseMove={handleMouseMove}
           disabled={isGenerating || !canGenerate}
-          className={`px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium text-lg
-            transition-all duration-300 hover:scale-105 hover:shadow-xl 
+          className={`px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-lg
+            transition-all duration-300 hover:scale-105 hover:shadow-[var(--gradient-glow)]
             active:scale-95 disabled:hover:scale-100 disabled:hover:shadow-none
-            relative overflow-hidden
+            relative overflow-hidden border border-primary/20
             ${isGenerating ? 'animate-pulse' : ''}
           `}
           style={{
             background: isGenerating || !canGenerate ? undefined : `
               radial-gradient(circle 100px at ${mousePosition.x}px ${mousePosition.y}px, 
-                rgba(255, 255, 0, 0.3), 
+                hsl(258 100% 80% / 0.3), 
                 transparent 70%
               ),
-              linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119))
-            `
+              hsl(var(--primary))
+            `,
+            boxShadow: !isGenerating && canGenerate ? 'var(--gradient-glow)' : undefined
           }}
         >
           {isGenerating ? (
