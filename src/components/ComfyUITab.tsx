@@ -73,7 +73,7 @@ interface WorkflowJSON {
 //     "_meta": { "title": "TeaCache" } 
 //   }
 // };
-const Workflow_JSON: WorkflowJSON = {{
+const Workflow_JSON: WorkflowJSON = {
   "id": "4fddaf42-26be-4f5c-bf24-4d6511623fb8",
   "revision": 0,
   "last_node_id": 263,
@@ -6170,7 +6170,6 @@ const Workflow_JSON: WorkflowJSON = {{
     "frontendVersion": "1.23.4"
   },
   "version": 0.4
-}
 };
 const ComfyUITab: React.FC<ComfyUITabProps> = ({ onError }) => {
   const [ngrokUrl, setNgrokUrl] = useState('');
