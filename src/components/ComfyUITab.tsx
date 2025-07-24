@@ -73,7 +73,7 @@ interface WorkflowJSON {
 //     "_meta": { "title": "TeaCache" } 
 //   }
 // };
-const WORKFLOW_JSON: WorkflowJSON {
+const WORKFLOW_JSON: WorkflowJSON= {
           "18": { "inputs": { "image": "clipspace/clipspace-mask-556781.3999999985.png [input]" }, "class_type": "LoadImage", "_meta": { "title": "Load destination (right-click to mask the area)" } },
           "19": { "inputs": { "width": ["101", 0], "height": ["101", 1], "position": "right-center", "x_offset": 0, "y_offset": 0, "image": ["100", 0] }, "class_type": "ImageCrop+", "_meta": { "title": "🔧 Image Crop" } },
           "20": { "inputs": { "unet_name": "flux1-fill-dev-fp8.safetensors", "weight_dtype": "default" }, "class_type": "UNETLoader", "_meta": { "title": "Load Diffusion Model" } },
