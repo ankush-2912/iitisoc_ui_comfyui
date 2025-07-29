@@ -5,7 +5,7 @@ import DocumentationPanel from "@/components/DocumentationPanel";
 import SystemDashboard from "@/components/SystemDashboard";
 import InOutpaintingTab from "@/components/InOutpaintingTab";
 import Img2ImgTab from "@/components/Img2ImgTab";
-import ComfyUITab from "@/components/ComfyUITab";
+import { ComfyUITab } from "@/components/ComfyUITab";
 import { Play, Palette, Image, Workflow } from "lucide-react";
 
 interface TabContentProps {
@@ -134,9 +134,7 @@ const TabContent = ({
           </TabsContent>
 
           <TabsContent value="comfyui" className="space-y-4">
-            <ComfyUITab
-              onError={onError}
-            />
+            <ComfyUITab />
           </TabsContent>
         </Tabs>
       </TabsContent>
