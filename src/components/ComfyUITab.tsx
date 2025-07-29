@@ -233,8 +233,9 @@ export const ComfyUITab = () => {
   }, [setupCanvas]);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="flex gap-6">
+      {/* Left side - Image inputs stacked vertically */}
+      <div className="flex-1 space-y-6">
         <Card className="border-border/20 bg-card/50 backdrop-blur-sm">
           <CardContent className="p-6 space-y-4">
             <div>
@@ -353,16 +354,29 @@ export const ComfyUITab = () => {
                 className="mt-2 bg-background/50 border-border/20"
               />
             </div>
-            
-            <Button
-              onClick={startGeneration}
-              disabled={isGenerating}
-              className="w-full"
-            >
-              {isGenerating ? 'Processing...' : 'Generate Image'}
-            </Button>
+          </CardContent>
+        </Card>
+      </div>
 
-            <div className="space-y-2">
+      {/* Right side - Result section */}
+      <div className="flex-1">
+        <Card className="border-border/20 bg-card/50 backdrop-blur-sm h-full">
+          <CardContent className="p-6 flex flex-col h-full">
+            <div className="flex-1">
+              {resultImage ? (
+                <img 
+                  src={resultImage} 
+                  alt="Generated" 
+                  className="max-w-full rounded-lg border border-border/20 shadow-lg"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-64 border-2 border-dashed border-border/20 rounded-lg">
+                  <p className="text-foreground/60">Generated image will appear here</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="space-y-4 mt-6">
               <div className="text-sm text-foreground/80 font-mono whitespace-pre-wrap bg-muted/20 p-3 rounded-md border border-border/20">
                 {status}
               </div>
@@ -374,22 +388,17 @@ export const ComfyUITab = () => {
                   />
                 </div>
               )}
+              <Button
+                onClick={startGeneration}
+                disabled={isGenerating}
+                className="w-full"
+              >
+                {isGenerating ? 'Processing...' : 'Generate Image'}
+              </Button>
             </div>
           </CardContent>
         </Card>
       </div>
-
-      {resultImage && (
-        <Card className="border-border/20 bg-card/50 backdrop-blur-sm">
-          <CardContent className="p-6">
-            <img 
-              src={resultImage} 
-              alt="Generated" 
-              className="max-w-full rounded-lg border border-border/20 shadow-lg"
-            />
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
